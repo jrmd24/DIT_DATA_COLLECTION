@@ -136,16 +136,20 @@ def load_charts():
     
     ax[0].set_title("Nombre de voitures par année selon l'état")    
     sns.lineplot(nbr_auto_par_annee_par_etat, x='annee', y="marque", hue='etat', ax=ax[0])
+    ax[0].set(xlabel='Année', ylabel='Nombre de voitures')
 
     ax[1].set_title("Nombre de voitures par année par type de boîte de vitesse")
     sns.lineplot(nbr_auto_par_annee_par_boite.reset_index(), x='annee', y='etat', hue='boite_vitesse', ax=ax[1])
+    ax[1].set(xlabel='Année', ylabel='Nombre de voitures')
  
     ax[2].set_title("Prix moyen des voitures par année par marque")    
     sns.lineplot(mean_prix_auto_par_annee_par_marque.reset_index(), x='annee', y="prix_nbr", hue='marque', ax=ax[2])
+    ax[2].set(xlabel='Année', ylabel='Prix moyen')
 
     ax[3].set_title("Prix moyen des voitures par année par marque - vue 2D")
     sns.histplot(mean_prix_auto_par_annee_par_marque.reset_index(), x='annee', y='marque', cbar=True, ax=ax[3])
-    
+    ax[3].set(xlabel='Année', ylabel='Marque')
+
     st.pyplot(fig)
 
     st.title("Motos")
@@ -164,41 +168,47 @@ def load_charts():
     #ax[0,0].tick_params(axis='x', labelrotation=90)
     ax[0].set_title("Nombre de motos par année selon l'état")    
     sns.lineplot(nbr_moto_par_annee_par_etat, x='annee', y="marque", hue='etat', ax=ax[0])
+    ax[0].set(xlabel='Année', ylabel='Nombre de motos')
  
     ax[1].set_title("Prix moyen des motos par année par marque")    
     sns.lineplot(mean_prix_moto_par_annee_par_marque.reset_index(), x='annee', y="prix_nbr", hue='marque', ax=ax[1])
+    ax[1].set(xlabel='Année', ylabel='Prix moyen')
 
     ax[2].set_title("Prix moyen des motos par année par marque - vue 2D")
     sns.histplot(mean_prix_moto_par_annee_par_marque.reset_index(), x='annee', y='marque', cbar=True, ax=ax[2])
+    ax[2].set(xlabel='Année', ylabel='Marque')
 
     st.pyplot(fig)
 
 
     st.title("Equipements")
-    #plot1 = plt.hist(equipements["Etat"])
-    #plot2 = plt.hist(equipements["address"], bins=20)
+
     equipements["adresse"].fillna("",inplace=True)
     equipements["Etat"].fillna("",inplace=True)
     #plt.figure(figsize=(20,60))
     #plt.style.use('Solarize_Light2') 
     plt.style.use('ggplot') 
     fig, ax = plt.subplots(2,2,constrained_layout = True, figsize=(15,15))
+
     ax[0,0].tick_params(axis='x', labelrotation=90)
     ax[0,0].set_title("Nombre d'équipements à vendre par adresse")
     sns.histplot(equipements, x="adresse", ax=ax[0,0])
-    #ax[1].tick_params(axis='x', labelrotation=90)    
+    ax[0,0].set(xlabel='Adresse', ylabel="Nombre d'équipements")
+
     ax[0,1].set_title("Etat")
     nbr_par_etat = equipements["Etat"].value_counts()
     ax[0,1].pie(nbr_par_etat, labels=nbr_par_etat.index)
+
     equipements['prix_nbr'] = equipements['prix'].apply(treat_price_column)
     grouped_eq = equipements[equipements["prix"].notna()].groupby("Etat")["prix_nbr"].mean()
     #st.write(grouped_eq)
     ax[1,0].tick_params(axis='x', labelrotation=90)
     ax[1,0].set_title("Prix moyen en fonction de l'état")
     ax[1,0].bar(grouped_eq.index, grouped_eq.values)
+    ax[1,0].set(xlabel='Etat', ylabel='Prix moyen')
     #plt.tight_layout()
     st.pyplot(fig)
-    #st.write(plot2)  
+
     #st.bar_chart(equipements.value_counts(), x="Etat")
 
 def local_css(file_name):
